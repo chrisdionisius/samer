@@ -33,7 +33,11 @@ function LoadData($file)
 }
 function LoadDataFromSQL($sql)
 {
-	$hasil=mysqli_query($id_mysql,$sql) or die(mysql_error());
+	$s="172.13.0.2";
+	$u="root";
+	$p="root";
+	$ids_mysql=mysqli_connect ($s, $u, $p);
+	$hasil=mysqli_query($ids_mysql,$sql) or die(mysql_error());
 
 	$data = array();
 	while($rows=mysqli_fetch_array($hasil)){

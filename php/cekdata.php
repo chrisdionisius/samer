@@ -5,12 +5,11 @@ function CheckKey($query) {
 	$p="root";
 	$ids_mysql=mysqli_connect ($s, $u, $p);
 	$cekdata=mysqli_query($ids_mysql,$query);
-	echo $query;
-	if(mysqli_num_rows($cekdata)>0) {
-		return true; 
+	if($cekdata==false) {
+		return false; 
 	}
 	else {
-		return false;
+		return true;
 	}
 }
 ?>

@@ -35,8 +35,12 @@ $cari_bahancr = $_SESSION['cari_bahancr'];
 	$pdf->SetDrawColor(0,0,0);
 	$pdf->Row2(array("No.", "Nama Bahan", "Harga/1000grm", "Stock Sisa(grm)", "Remark"));
 		
+	$s="172.13.0.2";
+	$u="root";
+	$p="root";
+	$ids_mysql=mysqli_connect ($s, $u, $p);
 $query = "select * from bahan where nama_bahan LIKE '%$nama_bahancr%' $cari_bahancr";
-$result = mysqli_query($id_mysql,$query);
+$result = mysqli_query($ids_mysql,$query);
 if (!$result) {
   die('Invalid query: ' . mysql_error());
 }

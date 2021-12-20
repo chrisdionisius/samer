@@ -3,6 +3,11 @@ session_start();
 require('../fpdf17/fpdf.php');
 require('../php/connect.php');
 ini_set('max_execution_time', 300);
+
+$s="172.13.0.2";
+	$u="root";
+	$p="root";
+	$ids_mysql=mysqli_connect ($s, $u, $p);
 	
 class PDF extends FPDF
 {
@@ -38,7 +43,7 @@ function LoadData($file)
 }
 function LoadDataFromSQL($sql)
 {
-	$hasil=mysqli_query($id_mysql,$sql) or die(mysql_error());
+	$hasil=mysqli_query($ids_mysql,$sql) or die(mysql_error());
 
 	$data = array();
 	while($rows=mysqli_fetch_array($hasil)){
@@ -55,7 +60,7 @@ function LoadDataFromSQL($sql)
 // Colored table
 function FancyTable($header, $data){
 $id_penjualan= json_decode(base64_decode($_GET['idp']));
-$get_penjualan = mysqli_fetch_array(mysqli_query($id_mysql,"select id_penjualan from penjualan where id_penjualan ='$id_penjualan'"));
+$get_penjualan = mysqli_fetch_array(mysqli_query($ids_mysql,"select id_penjualan from penjualan where id_penjualan ='$id_penjualan'"));
 $date = date("Y-m-d");
 
 				$this->setFont('arial','',9);	
@@ -108,7 +113,7 @@ $date = date("Y-m-d");
 	$this->setFont('arial','',10);	
 	$a=100;
 	$id_penjualan= json_decode(base64_decode($_GET['idp']));
-	$query = mysqli_query($id_mysql,"SELECT * from penjualan where id_penjualan='$id_penjualan' ");
+	$query = mysqli_query($ids_mysql,"SELECT * from penjualan where id_penjualan='$id_penjualan' ");
 		
 		$no = 1;
 		$baris=1;
@@ -148,7 +153,7 @@ $pdf = new PDF('P','mm','A4');
 $header = array('No', ' Nama Menu', 'Qty', 'Harga');
 // Data loading
 $id_penjualan= json_decode(base64_decode($_GET['idp']));
-$getiddetailpenjualan_penjualan = mysqli_fetch_array(mysqli_query($id_mysql,"select iddetailpenjualan_penjualan from penjualan where id_penjualan ='$id_penjualan'"));
+$getiddetailpenjualan_penjualan = mysqli_fetch_array(mysqli_query($ids_mysql,"select iddetailpenjualan_penjualan from penjualan where id_penjualan ='$id_penjualan'"));
 $id_detailpenjualan = $getiddetailpenjualan_penjualan['iddetailpenjualan_penjualan'];
 $query="SELECT m.nama_menu, dp.qty_detailpenjualan, dp.harga_detailpenjualan from menu m, detailpenjualan dp where m.id_menu=dp.idmenu_detailpenjualan and dp.id_detailpenjualan='$id_detailpenjualan'" ;
  

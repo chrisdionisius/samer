@@ -3,6 +3,11 @@ session_start();
 require('../fpdf17/fpdf.php');
 require('../php/connect.php');
 ini_set('max_execution_time', 300);
+
+$s="172.13.0.2";
+	$u="root";
+	$p="root";
+	$ids_mysql=mysqli_connect ($s, $u, $p);
 	
 class PDF extends FPDF
 {
@@ -38,7 +43,11 @@ function LoadData($file)
 }
 function LoadDataFromSQL($sql)
 {
-	$hasil=mysqli_query($id_mysql,$sql) or die(mysql_error());
+	$s="172.13.0.2";
+	$u="root";
+	$p="root";
+	$ids_mysql=mysqli_connect ($s, $u, $p);
+	$hasil=mysqli_query($ids_mysql,$sql) or die(mysql_error());
 
 	$data = array();
 	while($rows=mysqli_fetch_array($hasil)){
@@ -55,7 +64,7 @@ function LoadDataFromSQL($sql)
 // Colored table
 function FancyTable($header, $data){
 $id_pembelian= json_decode(base64_decode($_GET['idp']));
-$get_pembelian = mysqli_fetch_array(mysqli_query($id_mysql,"select id_pembelian from pembelian where id_pembelian ='$id_pembelian'"));
+$get_pembelian = mysqli_fetch_array(mysqli_query($ids_mysql,"select id_pembelian from pembelian where id_pembelian ='$id_pembelian'"));
 $date = date("Y-m-d");
 
 				$this->setFont('arial','',9);	
@@ -108,7 +117,7 @@ $date = date("Y-m-d");
 	$this->setFont('arial','',10);	
 	$a=100;
 	$id_pembelian= json_decode(base64_decode($_GET['idp']));
-	$query = mysqli_query($id_mysql,"SELECT * from pembelian where id_pembelian='$id_pembelian' ");
+	$query = mysqli_query($ids_mysql,"SELECT * from pembelian where id_pembelian='$id_pembelian' ");
 		
 		$no = 1;
 		$baris=1;
@@ -148,7 +157,7 @@ $pdf = new PDF('P','mm','A4');
 $header = array('No', ' Nama Bahan', 'Qty(grm)', 'Harga');
 // Data loading
 $id_pembelian= json_decode(base64_decode($_GET['idp']));
-$getiddetailpembelian_pembelian = mysqli_fetch_array(mysqli_query($id_mysql,"select iddetailpembelian_pembelian from pembelian where id_pembelian ='$id_pembelian'"));
+$getiddetailpembelian_pembelian = mysqli_fetch_array(mysqli_query($ids_mysql,"select iddetailpembelian_pembelian from pembelian where id_pembelian ='$id_pembelian'"));
 $id_detailpembelian = $getiddetailpembelian_pembelian['iddetailpembelian_pembelian'];
 $query="SELECT b.nama_bahan, db.qty_detailpembelian, db.harga_detailpembelian from bahan b, detailpembelian db where b.id_bahan=db.idbahan_detailpembelian and db.id_detailpembelian='$id_detailpembelian'" ;
  
