@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  php-apache-environment:
+    image: chrisdionisius/samer
+    container_name: apache-samer
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - 8000:80
+    networks:
+      - backend
+
+  db:
+    container_name: db-samer
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: samer
+    ports:
+      - "9806:3306"
+    volumes:
+      - db:/var/lib/mysql
+      - ./database/samer.sql:/docker-entrypoint-initdb.d/samer.sql
+    networks:
+      - backend
+
+volumes:
+  db:
+
+networks:
+  backend:
+    name: backend-network-samer
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.13.0.0/24
